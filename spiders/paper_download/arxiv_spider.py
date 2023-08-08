@@ -156,5 +156,5 @@ for i, js in enumerate(result):
     except Exception:
         err_file.write(f"下载出错： {i+1}/{total} {title} ...")
         continue
-
+err_file.close()
 print('\n\ndone!!!')
