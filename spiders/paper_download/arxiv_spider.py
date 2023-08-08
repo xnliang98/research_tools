@@ -138,7 +138,7 @@ with open(md_path, 'w', encoding='utf-8') as fw:
                 \n- authors: {res['authors']}\n- comments: {res['comments']}\n- [PDF FILE](./pdf_files/{title}.pdf)\n\n ![fisrt page](./img_files/{title}.png)\n\n\n"
         fw.writelines(md_block)
 
-
+err_file = open(f'{saved_path}/{date_str}/err.log', "a")
 for i, js in enumerate(result):
     title = js['title']
     title = remove_symbols(title)
@@ -148,7 +148,13 @@ for i, js in enumerate(result):
     arxiv_id = js['arxiv_id']
     pdf_link = js['pdf_link']
     print(f"processing {i+1}/{total} {title} ...")
+    if os.path.exists(f'{saved_path}/{date_str}/pdf_files/{title}.pdf'):
+        continue
     # download_pdf_image(pdf_link, title)
-    download_file(pdf_link, title, saved_path)
+    try:
+        download_file(pdf_link, title, saved_path)
+    except Exception:
+        err_file.write(f"下载出错： {i+1}/{total} {title} ...")
+        continue
 
 print('\n\ndone!!!')
